@@ -5,6 +5,10 @@ import Task from "../models/Task.js";
 import Wallet from "../models/Wallet.js";
 import Otp from "../models/Otp.js";
 
+// Dont't remove the below imports
+import "pg";
+import "pg-hstore";
+
 const syncModel = async () => {
   User.hasMany(Transaction, { foreignKey: "senderId", as: "sentTransactions" });
   Transaction.belongsTo(User, {
