@@ -3,13 +3,19 @@ import { config } from "dotenv";
 
 config();
 
-const database = new Sequelize({
-  host: process.env.DB_HOST,
-  username: process.env.DB_USER,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+const database = new Sequelize(process.env.DB_URI, {
   dialect: process.env.SEQUELIZE_DIALECT,
+  dialectOptions: {
+    ssl: process.env.NODE_ENV === "production" && {
+      required: true,
+      rejectUnauthorized: false,
+      ca: process.env.DB_CA,
+    },
+  },
+  pool: {
+    max: 10, // Maximum number of connections in the pool
+    idle: 10000, // Connection idle time before release (in ms)
+  },
   logging: false,
 });
 
