@@ -28,6 +28,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(rateLimiter);
+app.use(express.static("email"));
 
 // log all request made to the console
 app.use((req, res, next) => {
