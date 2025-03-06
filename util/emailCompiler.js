@@ -1,6 +1,5 @@
-import * as fs from "fs/promises";
-import * as path from "path";
 import Handlebars from "handlebars";
+import { loginHTML, welcomeHTML, otpHTML, newTask } from "../email/compiled.js";
 
 /**
  * Compile HTML file and return a string of the HTML document.
@@ -11,11 +10,18 @@ import Handlebars from "handlebars";
  */
 async function compileEmail(fileName, context) {
   try {
-    const htmlMail = await fs.readFile(
-      path.join("email", fileName + ".html"),
-      "utf8"
-    );
-    const template = Handlebars.compile(htmlMail);
+    let htmlTemplate =
+      fileName === "welcome"
+        ? welcomeHTML
+        : fileName === "otp"
+        ? otpHTML
+        : fileName === "new-task"
+        ? newTask
+        : fileName === "login"
+        ? loginHTML
+        : "";
+
+    const template = Handlebars.compile(htmlTemplate);
     let html = template(context);
 
     return html;
