@@ -148,7 +148,7 @@ export const logIn = async (req, res) => {
       expiresIn: "60days",
     });
 
-    if (process.env.NODE_ENV !== "production") {
+    
       const IPresponse = await axios.get(`https://api64.ipify.org?format=json`);
       const { ip } = IPresponse.data;
       const response = await axios.get(`http://ip-api.com/json/${ip}`);
@@ -162,7 +162,7 @@ export const logIn = async (req, res) => {
       }).then((html) => {
         sendMail("New Login Alert - Charmpay Inc", user.email, html);
       });
-    }
+    
     res.json({ token, user, message: "Login successful" });
   } catch (error) {
     console.log(error);
