@@ -8,6 +8,10 @@ const Beneficiary = database.define("beneficiary", {
     primaryKey: true,
     allowNull: false,
   },
+  userId: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
 });
 
 export default Beneficiary;

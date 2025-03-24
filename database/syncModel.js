@@ -76,13 +76,18 @@ const syncModel = async () => {
   Task.hasOne(Transaction);
   Transaction.belongsTo(Task, { onDelete: "CASCADE", onUpdate: "NO ACTION" });
 
-  User.belongsToMany(User, {
-    through: Beneficiary,
-    onDelete: "NO ACTION",
-    onUpdate: "NO ACTION",
-    as: "beneficiaries",
+  User.hasMany(Beneficiary, { foreignKey: "userId", as: "beneficiaries" });
+  Beneficiary.belongsTo(User, { foreignKey: "userId", as: "owner" });
+
+  User.hasMany(Beneficiary, {
+    foreignKey: "beneficiaryId",
+    as: "isBeneficiaryFor",
   });
-  User.hasMany(Beneficiary);
+  Beneficiary.belongsTo(User, {
+    foreignKey: "beneficiaryId",
+    as: "beneficiary",
+  });
+
   await database.sync({ alter: true });
   console.log("Model sync successful");
 };
