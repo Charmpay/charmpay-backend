@@ -4,6 +4,7 @@ import Transaction from "../models/Transaction.js";
 import User from "../models/User.js";
 import Wallet from "../models/Wallet.js";
 import { compareSync } from "bcrypt";
+import Beneficiary from "../models/Beneficiary.js";
 
 /**
  * This endpoint is used to get a transaction id
@@ -219,6 +220,15 @@ export const directTransaction = async (req, res) => {
       amount: parseFloat(amount),
       status: "successful",
     });
+
+    let beneficiary = await Beneficiary.findOne({
+      where: { userId, beneficiaryId: recipientId },
+    });
+    if (!beneficiary)
+      await Beneficiary.create({
+        userId,
+        beneficiaryId: recipientId,
+      });
 
     res.json({ message: "Transaction successful" });
   } catch (error) {

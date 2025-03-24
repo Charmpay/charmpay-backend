@@ -61,8 +61,11 @@ export const fetchUserByEmail = async (req, res) => {
     const user = await User.findOne({
       where: {
         email,
+        emailVerified: true,
       },
-      include: { all: true },
+      attributes: {
+        exclude: ["paystack_customer_code", "transactionPin", "passCode"],
+      },
     });
 
     if (!user)

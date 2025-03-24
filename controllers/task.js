@@ -63,10 +63,14 @@ export const createTask = async (req, res) => {
       currentBalance: userWallet.currentBalance - amount,
     });
 
-    await Beneficiary.create({
-      userId,
-      beneficiaryId: assignedTo
-    })
+    let beneficiary = await Beneficiary.findOne({
+      where: { userId, beneficiaryId: assignedTo },
+    });
+    if (!beneficiary)
+      await Beneficiary.create({
+        userId,
+        beneficiaryId: assignedTo,
+      });
 
     compileEmail("new-task", {
       user: {
