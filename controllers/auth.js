@@ -126,7 +126,7 @@ export const logIn = async (req, res) => {
   try {
     let { email, passCode } = req.body;
 
-    let user = await User.findOne({ where: { phoneNumber: email } });
+    let user = await User.findOne({ where: { email } });
 
     if (!user)
       return res
