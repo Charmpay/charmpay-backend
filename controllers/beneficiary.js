@@ -9,7 +9,10 @@ export const getAllBeneficiaries = async (req, res) => {
   try {
     const { id: userId } = req.user;
 
-    const beneficiaries = await Beneficiary.findAll({ where: { userId } });
+    const beneficiaries = await Beneficiary.findAll({
+      where: { userId },
+      include: { all: true },
+    });
 
     if (beneficiaries.length === 0)
       return res.status(404).json({ message: "No beneficiary yet" });
