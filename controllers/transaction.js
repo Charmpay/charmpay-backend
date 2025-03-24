@@ -3,6 +3,7 @@ import Task from "../models/Task.js";
 import Transaction from "../models/Transaction.js";
 import User from "../models/User.js";
 import Wallet from "../models/Wallet.js";
+import { compareSync } from "bcrypt";
 
 /**
  * This endpoint is used to get a transaction id
