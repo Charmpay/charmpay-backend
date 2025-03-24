@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<head>
+    <title>Account Funded Successfully - Charmpay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #1e3a8a;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .content h2,
+        h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .content p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #4c56af;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .footer {
+            background-color: #f9f9f9;
+            color: #888;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>💰 Account Funded Successfully</h1>
+        </div>
+        <div class="content">
+            <h2>Hello {{user.firstName}},</h2>
+            <p>
+                Your account has been successfully funded on <strong>Charmpay</strong>. Below are the details of the
+                transaction:
+            </p>
+            <ul>
+                <li><strong>Amount Funded:</strong> {{transaction.amount}}</li>
+                <li><strong>Transaction ID:</strong> {{transaction.id}}</li>
+                <li><strong>Payment Method:</strong> {{transaction.method}}</li>
+                <li><strong>Transaction Date:</strong> {{transaction.date}}</li>
+            </ul>
+            <p>
+                You can check your updated balance in your <strong>Charmpay App</strong>. If you have any questions,
+                feel free to reach out to our support team.
+            </p>
+            <a href="{{accountLink}}" class="button">View Account</a>
+            <p>
+                Need assistance? Contact our support team at
+                <a href="mailto:charmpayinc@gmail.com">charmpayinc@gmail.com</a>.
+            </p>
+            <p>
+                <strong>Best Regards,</strong><br />
+                The Charmpay Team
+            </p>
+        </div>
+        <div class="footer">
+            © 2025 Charmpay Inc. | Secure Payments, Trusted Transactions.
+        </div>
+    </div>
+</body>
+
+</html>

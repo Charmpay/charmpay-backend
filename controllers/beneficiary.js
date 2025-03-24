@@ -1,4 +1,5 @@
 import Beneficiary from "../models/Beneficiary.js";
+import User from "../models/User.js";
 
 /**
  * This endpoint is used to fetch all user beneficiary
@@ -11,7 +12,10 @@ export const getAllBeneficiaries = async (req, res) => {
 
     const beneficiaries = await Beneficiary.findAll({
       where: { userId },
-      include: { all: true, as: "beneficiaries" },
+      include: [
+        { model: User, as: "user" },
+        { model: User, as: "beneficiary" },
+      ],
     });
 
     if (beneficiaries.length === 0)
