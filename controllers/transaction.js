@@ -217,6 +217,7 @@ export const directTransaction = async (req, res) => {
       senderWalletId: userWallet.id,
       receiverWalletId: recipientWallet.id,
       amount: parseFloat(amount),
+      status: "successful",
     });
 
     res.json({ message: "Transaction successful" });
