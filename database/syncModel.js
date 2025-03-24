@@ -82,6 +82,7 @@ const syncModel = async () => {
     onUpdate: "NO ACTION",
     as: "beneficiaries",
   });
+  User.hasMany(Beneficiary);
   await database.sync({ alter: true });
   console.log("Model sync successful");
 };
