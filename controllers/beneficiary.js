@@ -1,4 +1,4 @@
-import Beneficiary from "../models/Beneficiary";
+import Beneficiary from "../models/Beneficiary.js";
 
 /**
  * This endpoint is used to fetch all user beneficiary

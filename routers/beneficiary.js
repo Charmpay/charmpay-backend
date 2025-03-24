@@ -3,7 +3,7 @@ import authMiddleware from "../middlewares/authMiddleware.js";
 import {
   getAllBeneficiaries,
   removeBeneficiary,
-} from "../controllers/beneficiary";
+} from "../controllers/beneficiary.js";
 
 const beneficiaryRouter = express.Router();
 
