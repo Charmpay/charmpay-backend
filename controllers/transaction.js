@@ -176,10 +176,10 @@ export const getAllTransactionsByStatus = async (req, res) => {
  */
 export const directTransaction = async (req, res) => {
   try {
-    const { id } = req.user;
+    const { id: userId } = req.user;
     const { recipientId, amount, transactionPin } = req.body;
 
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
     let isTransactionPinCorrect = compareSync(
@@ -190,7 +190,7 @@ export const directTransaction = async (req, res) => {
       return res.status(401).json({ message: "Incorrect transaction pin" });
 
     // first check if the user have suficient balance
-    const userWallet = await Wallet.findOne({ where: { userId: id } });
+    const userWallet = await Wallet.findOne({ where: { userId } });
 
     if (userWallet.currentBalance < amount)
       return res.status(422).json({ message: "Insufficient Balance" });
@@ -212,7 +212,7 @@ export const directTransaction = async (req, res) => {
 
     // recording the transaction
     await Transaction.create({
-      senderId: id,
+      senderId: userId,
       receiverId: recipientId,
       senderWalletId: userWallet.id,
       receiverWalletId: recipientWallet.id,
