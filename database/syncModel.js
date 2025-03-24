@@ -4,6 +4,7 @@ import Transaction from "../models/Transaction.js";
 import Task from "../models/Task.js";
 import Wallet from "../models/Wallet.js";
 import Otp from "../models/Otp.js";
+import Beneficiary from "../models/Beneficiary.js";
 
 // Dont't remove the below imports
 import "pg";
@@ -74,6 +75,13 @@ const syncModel = async () => {
 
   Task.hasOne(Transaction);
   Transaction.belongsTo(Task, { onDelete: "CASCADE", onUpdate: "NO ACTION" });
+
+  User.belongsToMany(User, {
+    through: Beneficiary,
+    onDelete: "NO ACTION",
+    onUpdate: "NO ACTION",
+    as: "beneficiaries",
+  });
   await database.sync({ alter: true });
   console.log("Model sync successful");
 };

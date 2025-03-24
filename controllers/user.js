@@ -54,19 +54,23 @@ export const editProfile = async (req, res) => {
  * @param {import("express").Request} req
  * @param {import("express").Response} res
  */
-export const fetchUser = async (req, res) => {
+export const fetchUserByEmail = async (req, res) => {
   try {
     const { email } = req.params;
 
-    const user = await User.findOne({where: {
-      email
-    }})
+    const user = await User.findOne({
+      where: {
+        email,
+      },
+      include: { all: true },
+    });
 
-    if (!user) return res.status(404).json({
-      message: "User not found"
-    })
+    if (!user)
+      return res.status(404).json({
+        message: "User not found",
+      });
 
-    res.json(user)
+    res.json(user);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error occurred while fetching user" });

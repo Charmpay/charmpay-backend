@@ -3,6 +3,7 @@ import Task from "../models/Task.js";
 import Transaction from "../models/Transaction.js";
 import User from "../models/User.js";
 import Wallet from "../models/Wallet.js";
+import Beneficiary from "../models/Beneficiary.js";
 import { Sequelize } from "sequelize";
 import compileEmail from "../util/emailCompiler.js";
 import sendMail from "../util/sendMail.js";
@@ -61,6 +62,11 @@ export const createTask = async (req, res) => {
     await userWallet.update({
       currentBalance: userWallet.currentBalance - amount,
     });
+
+    await Beneficiary.create({
+      userId,
+      beneficiaryId: assignedTo
+    })
 
     compileEmail("new-task", {
       user: {
