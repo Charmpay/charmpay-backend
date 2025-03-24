@@ -11,7 +11,7 @@ export const getAllBeneficiaries = async (req, res) => {
 
     const beneficiaries = await Beneficiary.findAll({
       where: { userId },
-      include: { all: true },
+      include: { all: true, as: "beneficiaries" },
     });
 
     if (beneficiaries.length === 0)
