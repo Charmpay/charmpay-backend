@@ -124,9 +124,9 @@ export const signUp = async (req, res) => {
  */
 export const logIn = async (req, res) => {
   try {
-    let { phoneNumber, passCode } = req.body;
+    let { email, passCode } = req.body;
 
-    let user = await User.findOne({ where: { phoneNumber } });
+    let user = await User.findOne({ where: { phoneNumber: email } });
 
     if (!user)
       return res

@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize";
 import Task from "../models/Task.js";
 import Transaction from "../models/Transaction.js";
 import User from "../models/User.js";
+import Wallet from "../models/Wallet.js";
 
 /**
  * This endpoint is used to get a transaction id
@@ -163,6 +164,65 @@ export const getAllTransactionsByStatus = async (req, res) => {
     console.log(error);
     res.status(500).json({
       message: "An error occurred while retrieving transactions",
+      error,
+    });
+  }
+};
+/**
+ * This endpoint is used to do direct transaction from one charmpay account to another
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ */
+export const directTransaction = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const { recipientId, amount, transactionPin } = req.body;
+
+    const user = await User.findByPk(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    let isTransactionPinCorrect = compareSync(
+      String(transactionPin),
+      user.transactionPin
+    );
+    if (!isTransactionPinCorrect)
+      return res.status(401).json({ message: "Incorrect transaction pin" });
+
+    // first check if the user have suficient balance
+    const userWallet = await Wallet.findOne({ where: { userId: id } });
+
+    if (userWallet.currentBalance < amount)
+      return res.status(422).json({ message: "Insufficient Balance" });
+
+    const recipientWallet = await Wallet.findOne({
+      where: { userId: recipientId },
+    });
+    if (!recipientWallet)
+      return res.status(404).json({ message: "Recipient not found" });
+
+    // performing transaction
+    await userWallet.update({
+      currentBalance: userWallet.currentBalance - amount,
+    });
+
+    await recipientWallet.update({
+      currentBalance: recipientWallet.currentBalance + amount,
+    });
+
+    // recording the transaction
+    await Transaction.create({
+      senderId: id,
+      receiverId: recipientId,
+      senderWalletId: userWallet.id,
+      receiverWalletId: recipientWallet.id,
+      amount: parseFloat(amount),
+    });
+
+    res.json({ message: "Transaction successful" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "An error occurred while performing transactionn",
       error,
     });
   }

@@ -50,13 +50,23 @@ export const editProfile = async (req, res) => {
 };
 
 /**
- * This endpoint is edit the current logged in user profile
+ * This endpoint is used to fetch user profile
  * @param {import("express").Request} req
  * @param {import("express").Response} res
  */
 export const fetchUser = async (req, res) => {
   try {
-    let { phoneNumber } = req.body;
+    const { email } = req.body;
+
+    const user = await User.findOne({where: {
+      email
+    }})
+
+    if (!user) return res.status(404).json({
+      message: "User not found"
+    })
+
+    res.json(user)
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error occurred while fetching user" });

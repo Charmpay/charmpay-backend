@@ -15,7 +15,7 @@ export const initFundingTransaction = async (req, res) => {
     const { amount } = req.body;
     const user = await User.findByPk(id);
     const transaction = await paystack.transaction.initialize({
-      amount: parseInt(`${amount}00`),
+      amount: parseInt(amount) * 100,
       email: user.email,
       name: `${user.firstName} ${user.lastName}`,
     });
@@ -62,12 +62,7 @@ export const verifyFundingTransaction = async (req, res) => {
 
     if (existingFunding)
       return res.status(422).json({ message: "Transaction already recorded" });
-    let amount = parseInt(
-      `${String(transaction.data.amount).slice(
-        0,
-        String(transaction.data.amount).length - 2
-      )}`
-    );
+    let amount = transaction.data.amount / 100;
 
     await Funding.create({
       walletId: wallet.id,
