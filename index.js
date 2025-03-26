@@ -9,6 +9,7 @@ import taskRouter from "./routers/task.js";
 import transactionRouter from "./routers/transaction.js";
 import fundingRouter from "./routers/funding.js";
 import beneficiaryRouter from "./routers/beneficiary.js";
+import notificationsRouter from "./routers/notification.js";
 
 config();
 
@@ -47,6 +48,7 @@ app.use("/api/task", taskRouter);
 app.use("/api/transaction", transactionRouter);
 app.use("/api/funding", fundingRouter);
 app.use("/api/beneficiary", beneficiaryRouter);
+app.use("/api/notification", notificationsRouter);
 
 await syncModel();
 
