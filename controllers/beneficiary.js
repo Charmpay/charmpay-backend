@@ -12,7 +12,7 @@ export const getAllBeneficiaries = async (req, res) => {
 
     const beneficiaries = await Beneficiary.findAll({
       where: { userId },
-     include: { model: User, as: "beneficiary" }
+      include: [{ model: User, as: "beneficiary" }],
     });
 
     if (beneficiaries.length === 0)
@@ -39,7 +39,7 @@ export const removeBeneficiary = async (req, res) => {
 
     const beneficiary = await Beneficiary.findOne({
       where: { userId, beneficiaryId },
-      include: [{model: User, as: "beneficiary"}]
+      include: [{ model: User, as: "beneficiary" }],
     });
 
     if (!beneficiary)

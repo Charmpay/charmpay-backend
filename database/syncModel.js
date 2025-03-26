@@ -87,10 +87,16 @@ const syncModel = async () => {
   //   onUpdate: "NO ACTION",
   // });
 
-  User.belongsToMany(User, {
-    through: Beneficiary,
+  User.hasMany(Beneficiary, { foreignKey: "userId", as: "beneficiaries" });
+  Beneficiary.belongsTo(User, { foreignKey: "userId", as: "owner" });
+
+  User.hasMany(Beneficiary, {
     foreignKey: "beneficiaryId",
-    as: "beneficiaries",
+    as: "isBeneficiaryFor",
+  });
+  Beneficiary.belongsTo(User, {
+    foreignKey: "beneficiaryId",
+    as: "beneficiary",
   });
 
   await database.sync({ alter: true });
