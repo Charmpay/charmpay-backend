@@ -12,7 +12,7 @@ export const getAllBeneficiaries = async (req, res) => {
 
     const beneficiaries = await Beneficiary.findAll({
       where: { userId },
-      include: { all: true },
+     include: { model: User, as: "beneficiary" }
     });
 
     if (beneficiaries.length === 0)
