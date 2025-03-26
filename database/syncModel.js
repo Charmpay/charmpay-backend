@@ -90,13 +90,10 @@ const syncModel = async () => {
   User.hasMany(Beneficiary, { foreignKey: "userId", as: "beneficiaries" });
   Beneficiary.belongsTo(User, { foreignKey: "userId", as: "owner" });
 
-  User.hasMany(Beneficiary, {
-    foreignKey: "beneficiaryId",
-    as: "isBeneficiaryFor",
-  });
+  User.hasMany(Beneficiary, { foreignKey: "beneficiaryId", as: "benefitedBy" });
   Beneficiary.belongsTo(User, {
     foreignKey: "beneficiaryId",
-    as: "beneficiary",
+    as: "beneficiaryUser",
   });
 
   await database.sync({ alter: true });

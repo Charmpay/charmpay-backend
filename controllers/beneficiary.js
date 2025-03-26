@@ -12,7 +12,7 @@ export const getAllBeneficiaries = async (req, res) => {
 
     const beneficiaries = await Beneficiary.findAll({
       where: { userId },
-      include: [{ model: User, as: "beneficiary" }],
+      include: [{ model: User, as: "beneficiaryUser" }], // ✅ Use the unique alias
     });
 
     if (beneficiaries.length === 0)
