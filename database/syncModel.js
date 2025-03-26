@@ -5,6 +5,7 @@ import Task from "../models/Task.js";
 import Wallet from "../models/Wallet.js";
 import Otp from "../models/Otp.js";
 import Beneficiary from "../models/Beneficiary.js";
+import Notification from "../models/Notification.js";
 
 // Dont't remove the below imports
 import "pg";
@@ -95,6 +96,24 @@ const syncModel = async () => {
     foreignKey: "beneficiaryId",
     as: "beneficiaryUser",
   });
+
+  User.hasMany(Notification, {
+    foreignKey: "senderId",
+    as: "sentNotifications",
+  });
+  Notification.belongsTo(User, { foreignKey: "senderId", as: "sender" });
+
+  User.hasMany(Notification, {
+    foreignKey: "recieverId",
+    as: "recievedtNotifications",
+  });
+  Notification.belongsTo(User, { foreignKey: "recieverId", as: "reciever" });
+
+  Transaction.hasMany(Notification);
+  Notification.belongsTo(Transaction);
+
+  Task.hasMany(Notification);
+  Notification.belongsTo(Task);
 
   await database.sync({ alter: true });
   console.log("Model sync successful");

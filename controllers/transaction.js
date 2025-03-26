@@ -212,7 +212,7 @@ export const directTransaction = async (req, res) => {
     });
 
     // recording the transaction
-    await Transaction.create({
+    let transaction = await Transaction.create({
       senderId: userId,
       receiverId: recipientId,
       senderWalletId: userWallet.id,
@@ -230,6 +230,18 @@ export const directTransaction = async (req, res) => {
         beneficiaryId: recipientId,
       });
 
+    await Notification.create({
+      receiverId: recipientId,
+      senderId: userId,
+      transactionId: transaction.id,
+      type: "recieve-new-transfer",
+    });
+    await Notification.create({
+      receiverId: userId,
+      senderId: recipientId,
+      transactionId: transaction.id,
+      type: "send-new-transfer",
+    });
     res.json({ message: "Transaction successful" });
   } catch (error) {
     console.log(error);

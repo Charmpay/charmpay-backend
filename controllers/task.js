@@ -1,6 +1,7 @@
 import { compareSync } from "bcrypt";
 import Task from "../models/Task.js";
 import Transaction from "../models/Transaction.js";
+import Notification from "../models/Notification.js";
 import User from "../models/User.js";
 import Wallet from "../models/Wallet.js";
 import Beneficiary from "../models/Beneficiary.js";
@@ -71,6 +72,14 @@ export const createTask = async (req, res) => {
         userId,
         beneficiaryId: assignedTo,
       });
+
+    await Notification.create({
+      receiverId: assignedTo,
+      senderId: userId,
+      taskId: task.id,
+      transactionId: transaction.id,
+      type: "new-task",
+    });
 
     compileEmail("new-task", {
       user: {
@@ -421,6 +430,27 @@ export const approveTask = async (req, res) => {
       status: "successful",
     });
 
+    await Notification.create({
+      receiverId: task.assigneeId,
+      senderId: task.assignerId,
+      taskId: task.id,
+      transactionId: transaction.id,
+      type: "approve-task",
+    });
+    await Notification.create({
+      receiverId: task.assignerId,
+      senderId: task.assigneeId,
+      taskId: task.id,
+      transactionId: transaction.id,
+      type: "send-new-transfer",
+    });
+    await Notification.create({
+      receiverId: task.assigneeId,
+      senderId: task.assignerId,
+      taskId: task.id,
+      transactionId: transaction.id,
+      type: "recieve-new-transfer",
+    });
     res.json({ message: "Task approved" });
   } catch (error) {
     console.log(error);
@@ -487,6 +517,29 @@ export const disapproveTask = async (req, res) => {
     // update transaction status
     await transaction.update({
       status: "reversed",
+    });
+
+    await Notification.create({
+      receiverId: task.assignerId,
+      senderId: task.assigneeId,
+      taskId: task.id,
+      transactionId: transaction.id,
+      type: "dissapprove-task",
+    });
+
+    await Notification.create({
+      receiverId: task.assignerId,
+      senderId: task.assigneeId,
+      taskId: task.id,
+      transactionId: transaction.id,
+      type: "recieve-new-transfer",
+    });
+    await Notification.create({
+      receiverId: task.assigneeId,
+      senderId: task.assignerId,
+      taskId: task.id,
+      transactionId: transaction.id,
+      type: "send-new-transfer",
     });
 
     res.json({ message: "Task disapproved" });
