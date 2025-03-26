@@ -10,14 +10,11 @@ export const getAllBeneficiaries = async (req, res) => {
   try {
     const { id: userId } = req.user;
 
-    const beneficiaries = await Beneficiary.findAll({
-      where: { userId },
-      include: [
-        // { model: User, as: "user" },
-        { model: User, as: "beneficiary" },
-      ],
+    const user = await User.findByPk(userId, {
+      include: Beneficiary,
     });
 
+    const {beneficiaries} = user
     if (beneficiaries.length === 0)
       return res.status(404).json({ message: "No beneficiary yet" });
 
