@@ -39,6 +39,7 @@ export const removeBeneficiary = async (req, res) => {
 
     const beneficiary = await Beneficiary.findOne({
       where: { userId, beneficiaryId },
+      include: [{model: User, as: "beneficiary"}]
     });
 
     if (!beneficiary)
