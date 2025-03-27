@@ -104,10 +104,10 @@ const syncModel = async () => {
   Notification.belongsTo(User, { foreignKey: "senderId", as: "sender" });
 
   User.hasMany(Notification, {
-    foreignKey: "recieverId",
-    as: "recievedtNotifications",
+    foreignKey: "receiverId",
+    as: "receivedNotifications",
   });
-  Notification.belongsTo(User, { foreignKey: "recieverId", as: "reciever" });
+  Notification.belongsTo(User, { foreignKey: "receiverId", as: "receiver" });
 
   Transaction.hasMany(Notification);
   Notification.belongsTo(Transaction);
