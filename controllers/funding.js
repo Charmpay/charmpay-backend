@@ -3,6 +3,7 @@ import paystack from "../libs/paystack.js";
 import User from "../models/User.js";
 import Wallet from "../models/Wallet.js";
 import Funding from "../models/Funding.js";
+import axios from "axios";
 
 /**
  * This endpoint is used to initialize a new transaction
@@ -13,13 +14,29 @@ export const initFundingTransaction = async (req, res) => {
   try {
     const { id } = req.user;
     const { amount } = req.body;
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(id, { include: Wallet });
     const transaction = await paystack.transaction.initialize({
       amount: parseInt(amount) * 100,
       email: user.email,
       name: `${user.firstName} ${user.lastName}`,
+      currency: "USD",
     });
 
+    // const transaction = await axios.post(
+    //   "https://api.paystack.co/transaction/initialize",
+    //   {
+    //     amount,
+    //     email: user.email,
+    //     currency: user.wallet.currency,
+    //     channels: ["card"],
+    //   },
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+    //       "Content-Type": "application/json",
+    //     },
+    //   }
+    // );
     res.json(transaction);
   } catch (error) {
     console.log(error);
@@ -62,6 +79,7 @@ export const verifyFundingTransaction = async (req, res) => {
 
     if (existingFunding)
       return res.status(422).json({ message: "Transaction already recorded" });
+
     let amount = transaction.data.amount / 100;
 
     await Funding.create({

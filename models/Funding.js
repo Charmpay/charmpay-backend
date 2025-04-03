@@ -24,6 +24,12 @@ const Funding = database.define("funding", {
     allowNull: false,
     unique: true,
   },
+  status: {
+    type: DataTypes.ENUM(),
+    allowNull: false,
+    values: ["pending", "successful", "failed"],
+    defaultValue: "pending",
+  },
 });
 
 export default Funding;
