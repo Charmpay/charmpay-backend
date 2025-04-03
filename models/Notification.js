@@ -1,6 +1,9 @@
 import database from "../database/database.js";
 import { DataTypes, UUID } from "sequelize";
 
+/**
+ * Notification Model
+ */
 const Notification = database.define("notification", {
   id: {
     type: DataTypes.UUID,

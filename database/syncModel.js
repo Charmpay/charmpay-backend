@@ -7,10 +7,6 @@ import Otp from "../models/Otp.js";
 import Beneficiary from "../models/Beneficiary.js";
 import Notification from "../models/Notification.js";
 
-// Dont't remove the below imports
-import "pg";
-import "pg-hstore";
-
 const syncModel = async () => {
   User.hasMany(Transaction, { foreignKey: "senderId", as: "sentTransactions" });
   Transaction.belongsTo(User, {

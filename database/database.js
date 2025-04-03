@@ -1,8 +1,15 @@
 import { Sequelize } from "sequelize";
 import { config } from "dotenv";
 
+// Dont't remove the below imports
+import "pg";
+import "pg-hstore";
+
 config();
 
+/**
+ * Charmpay Database
+ */
 const database = new Sequelize(process.env.DB_URI, {
   dialect: process.env.SEQUELIZE_DIALECT,
   dialectOptions: {

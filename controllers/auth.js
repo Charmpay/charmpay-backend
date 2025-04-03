@@ -86,6 +86,7 @@ export const signUp = async (req, res) => {
     await Wallet.create({
       userId: newUser.id,
     });
+
     // sending otp to client's email
     try {
       // Generate OTP
@@ -148,21 +149,20 @@ export const logIn = async (req, res) => {
       expiresIn: "60days",
     });
 
-    
-      const IPresponse = await axios.get(`https://api64.ipify.org?format=json`);
-      const { ip } = IPresponse.data;
-      const response = await axios.get(`http://ip-api.com/json/${ip}`);
-      compileEmail("login", {
-        user: {
-          firstName: user.firstName,
-          createdAt: user.createdAt,
-        },
-        ...response.data,
-        timestamp: Date(),
-      }).then((html) => {
-        sendMail("New Login Alert - Charmpay Inc", user.email, html);
-      });
-    
+    const IPresponse = await axios.get(`https://api64.ipify.org?format=json`);
+    const { ip } = IPresponse.data;
+    const response = await axios.get(`http://ip-api.com/json/${ip}`);
+    compileEmail("login", {
+      user: {
+        firstName: user.firstName,
+        createdAt: user.createdAt,
+      },
+      ...response.data,
+      timestamp: Date(),
+    }).then((html) => {
+      sendMail("New Login Alert - Charmpay Inc", user.email, html);
+    });
+
     res.json({ token, user, message: "Login successful" });
   } catch (error) {
     console.log(error);
