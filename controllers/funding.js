@@ -3,7 +3,10 @@ import paystack from "../libs/paystack.js";
 import User from "../models/User.js";
 import Wallet from "../models/Wallet.js";
 import Funding from "../models/Funding.js";
-import axios from "axios";
+import Notification from "../models/Notification.js";
+import compileEmail from "../util/emailCompiler.js";
+import sendMail from "../util/sendMail.js";
+import { Op } from "sequelize";
 
 /**
  * This endpoint is used to initialize a new transaction
@@ -19,24 +22,16 @@ export const initFundingTransaction = async (req, res) => {
       amount: parseInt(amount) * 100,
       email: user.email,
       name: `${user.firstName} ${user.lastName}`,
-      currency: "USD",
+      currency: user.wallet.currency,
     });
 
-    // const transaction = await axios.post(
-    //   "https://api.paystack.co/transaction/initialize",
-    //   {
-    //     amount,
-    //     email: user.email,
-    //     currency: user.wallet.currency,
-    //     channels: ["card"],
-    //   },
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-    //       "Content-Type": "application/json",
-    //     },
-    //   }
-    // );
+    await Funding.create({
+      walletId: user.wallet.id,
+      userId: user.id,
+      amount,
+      paystack_reference: transaction.data.reference,
+    });
+
     res.json(transaction);
   } catch (error) {
     console.log(error);
@@ -46,64 +41,81 @@ export const initFundingTransaction = async (req, res) => {
   }
 };
 
-/**
- * This endpoint is used to verify a transaction
- * @param {import("express").Request} req
- * @param {import("express").Response} res
- */
-export const verifyFundingTransaction = async (req, res) => {
+export const verifyFundingTransaction = async () => {
   try {
-    const { id } = req.user;
-    const { reference } = req.body;
-    const user = await User.findByPk(id);
-    const transaction = await paystack.transaction.verify(reference);
-
-    if (!user)
-      return res.status(404).json({ message: "User account not found" });
-
-    if (transaction.data.status !== "success")
-      return res.status(422).json({
-        verified: transaction.data.status === "success",
-        message: "Verification failed",
-        transactionData: transaction.data,
-      });
-
-    let wallet = await Wallet.findOne({ where: { userId: user.id } });
-
-    let existingFunding = await Funding.findOne({
+    const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000);
+    await Funding.destroy({
       where: {
-        paystack_reference: transaction.data.reference,
-        paystack_id: String(transaction.data.id),
+        createdAt: {
+          [Op.lt]: twoHoursAgo, // more than two hour ago
+        },
+      },
+    });
+    let existingFunding = await Funding.findAll({
+      where: {
+        status: "pending",
+      },
+      include: {
+        all: true,
       },
     });
 
-    if (existingFunding)
-      return res.status(422).json({ message: "Transaction already recorded" });
+    existingFunding.forEach(async (funding) => {
+      if (!funding.user || !funding.wallet) return;
 
-    let amount = transaction.data.amount / 100;
+      const paystackTransaction = await paystack.transaction.verify(
+        funding.paystack_reference
+      );
 
-    await Funding.create({
-      walletId: wallet.id,
-      userId: user.id,
-      amount,
-      paystack_reference: transaction.data.reference,
-      paystack_id: String(transaction.data.id),
-    });
+      if (paystackTransaction.data.status !== "success") return;
 
-    await wallet.update({
-      currentBalance: wallet.currentBalance + amount,
-    });
+      let amount = paystackTransaction.data.amount / 100;
+      const wallet = await Wallet.findOne({
+        where: {
+          userId: funding.userId,
+        },
+      });
+      await wallet.update({
+        currentBalance: wallet.currentBalance + amount,
+      });
 
-    res.json({
-      verified: transaction.data.status === "success",
-      message: transaction.message,
-      transactionData: transaction.data,
+      // recording the transaction
+      let transaction = await Transaction.create({
+        senderId: funding.userId,
+        senderWalletId: funding.walletId,
+        receiverId: funding.userId,
+        receiverWalletId: funding.walletId,
+        amount: parseFloat(amount),
+        status: "successful",
+        type: "funding",
+      });
+      await funding.update({ status: "successful" });
+
+      await Notification.create({
+        receiverId: funding.userId,
+        transactionId: transaction.id,
+        type: "account-deposit",
+      });
+      compileEmail("fund-account", {
+        user: {
+          firstName: funding.user.firstName,
+        },
+        transaction: {
+          amount: `${funding.wallet.currency} ${amount}`,
+          id: transaction.id,
+          method: paystackTransaction.data.channel,
+          ref: funding.paystack_reference,
+        },
+        timestamp: Date(),
+      }).then((html) => {
+        sendMail(
+          "💰 Account Funded Successfully - Charmpay Inc",
+          funding.user.email,
+          html
+        );
+      });
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      message: "An error occurred while verifying transaction",
-      error,
-    });
   }
 };

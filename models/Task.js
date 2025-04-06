@@ -20,7 +20,7 @@ const Task = database.define("task", {
     type: DataTypes.UUID,
     allowNull: false,
   },
-  description: DataTypes.STRING(500),
+  description: DataTypes.STRING(1000),
   status: {
     type: DataTypes.ENUM(),
     allowNull: false,

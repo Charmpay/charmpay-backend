@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login Alert - Charmpay</title>
+    <title>Dispute Evidence Submitted - Charmpay</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -42,17 +42,12 @@
         line-height: 1.6;
         margin-bottom: 15px;
       }
-      ul {
+      .highlight {
         background-color: #f1f9ff;
-        padding: 15px 20px;
+        padding: 12px;
         border-left: 4px solid #4c9aff;
-        border-radius: 4px;
-        color: #333;
-        font-size: 15px;
         margin-bottom: 20px;
-      }
-      ul li {
-        margin-bottom: 8px;
+        border-radius: 4px;
       }
       .button {
         display: inline-block;
@@ -76,36 +71,40 @@
   <body>
     <div class="email-container">
       <div class="header">
-        <h1>🔐 Login Detected</h1>
+        <h1>📎 Evidence Submitted</h1>
       </div>
       <div class="content">
         <h2>Hello {{user.firstName}},</h2>
-        <p>We noticed a new login to your <strong>Charmpay</strong> account:</p>
-
-        <ul>
-          <li>
-            <strong>Location:</strong> {{city}}, {{regionName}}, {{country}}
-          </li>
-          <li><strong>IP Address:</strong> {{query}}</li>
-          <li><strong>Date & Time:</strong> {{timestamp}}</li>
-        </ul>
-
         <p>
-          If this was <strong>you</strong>, no action is required. If this
-          <strong>wasn’t you</strong>, please secure your account immediately.
+          The second party has submitted their evidence in relation to the
+          ongoing dispute for the following task:
         </p>
 
-        <a href="{{secureAccountLink}}" class="button">Secure My Account</a>
+        <div class="highlight">
+          <p><strong>Task Title:</strong> {{task.title}}</p>
+          <p><strong>Dispute ID:</strong> {{disputeId}}</p>
+          <p><strong>Submitted By:</strong> {{submittedBy}}</p>
+          <p><strong>Date Submitted:</strong> {{submissionDate}}</p>
+        </div>
 
         <p>
-          If you have any questions, contact us at
-          <a href="mailto:support@charmpay.com">support@charmpay.com</a>.
+          You may now review the evidence and provide any additional response if
+          needed. The Dispute Resolution Team will assess all documents before
+          making a final decision.
         </p>
 
-        <p><strong>Best Regards,</strong><br />The Charmpay Team</p>
+        <a href="{{disputeLink}}" class="button">Review Evidence</a>
+
+        <p>
+          For questions or support, contact us at
+          <a href="mailto:charmpayinc@gmail.com">charmpayinc@gmail.com</a>.
+        </p>
+
+        <p>Thank you for your cooperation.</p>
+        <p><strong>— The Charmpay Team</strong></p>
       </div>
       <div class="footer">
-        © 2025 Charmpay Inc. | Secure Transactions, Trusted Payments.
+        © 2025 Charmpay Inc. | Fair Disputes. Secure Payments.
       </div>
     </div>
   </body>

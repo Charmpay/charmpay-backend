@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
+import cron from "node-cron";
 import authRouter from "./routers/auth.js";
 import rateLimit from "express-rate-limit";
 import syncModel from "./database/syncModel.js";
@@ -10,6 +11,9 @@ import transactionRouter from "./routers/transaction.js";
 import fundingRouter from "./routers/funding.js";
 import beneficiaryRouter from "./routers/beneficiary.js";
 import notificationsRouter from "./routers/notification.js";
+import { verifyFundingTransaction } from "./controllers/funding.js";
+import disputeRouter from "./routers/dispute.js";
+import { remindUsers } from "./controllers/task.js";
 
 config();
 
@@ -49,8 +53,12 @@ app.use("/api/transaction", transactionRouter);
 app.use("/api/funding", fundingRouter);
 app.use("/api/beneficiary", beneficiaryRouter);
 app.use("/api/notification", notificationsRouter);
+app.use("/api/dispute", disputeRouter);
 
 await syncModel();
+
+cron.schedule("*/5 * * * * *", async () => await verifyFundingTransaction());
+cron.schedule("0 0 * * *", async () => await remindUsers());
 
 app.listen(SERVER_PORT, () => {
   console.log(`Server running on http://localhost:${SERVER_PORT}`);

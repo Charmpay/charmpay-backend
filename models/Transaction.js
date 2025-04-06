@@ -36,6 +36,12 @@ const Transaction = database.define("transaction", {
     values: ["pending", "in-escrow", "successful", "failed", "reversed"],
     defaultValue: "in-escrow",
   },
+  type: {
+    type: DataTypes.ENUM,
+    allowNull: false,
+    values: ["transfer", "withdrawal", "funding"],
+    defaultValue: "transfer",
+  },
 });
 
 export default Transaction;

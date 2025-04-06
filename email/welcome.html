@@ -1,119 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Welcome to Charmpay</title>
     <style>
       body {
-        font-family: Arial, sans-serif;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #f4f4f4;
+        background-color: #f4f6f8;
       }
+
       .email-container {
-        max-width: 600px;
-        margin: 20px auto;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        max-width: 640px;
+        margin: 40px auto;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
         overflow: hidden;
+        border: 1px solid #e3e8ee;
       }
+
       .header {
         background-color: #1e3a8a;
-        color: white;
+        color: #ffffff;
         text-align: center;
-        padding: 30px 20px;
+        padding: 40px 20px;
       }
+
       .header h1 {
         margin: 0;
         font-size: 28px;
       }
+
       .content {
-        padding: 20px;
+        padding: 30px 25px;
       }
-      .content h2,
-      h3 {
-        color: #333;
+
+      .content h2 {
+        color: #1e3a8a;
         margin-bottom: 10px;
+        font-size: 22px;
       }
+
+      .content h3 {
+        color: #444;
+        margin-top: 30px;
+        font-size: 18px;
+      }
+
       .content p {
         font-size: 16px;
         color: #555;
-        line-height: 1.6;
+        line-height: 1.7;
+        margin-bottom: 16px;
       }
+
+      .content strong {
+        color: #333;
+      }
+
+      .content a {
+        color: #1e3a8a;
+        text-decoration: none;
+      }
+
+      .content a:hover {
+        text-decoration: underline;
+      }
+
+      .highlight {
+        background-color: #f1f5ff;
+        padding: 12px 16px;
+        border-left: 4px solid #4c9aff;
+        border-radius: 4px;
+        margin-bottom: 20px;
+      }
+
       .footer {
-        background-color: #f9f9f9;
+        background-color: #f9fafc;
         color: #888;
         text-align: center;
-        padding: 10px;
-        font-size: 12px;
+        padding: 20px;
+        font-size: 13px;
+        border-top: 1px solid #eee;
       }
     </style>
   </head>
   <body>
     <div class="email-container">
       <div class="header">
-        <h1>Welcome to Charmpay!</h1>
+        <h1>🎉 Welcome to Charmpay!</h1>
       </div>
       <div class="content">
         <h2>Hello {{user.firstName}},</h2>
-        <p><strong>Account Verification Successful</strong></p>
+        <div class="highlight">
+          <p><strong>✅ Account Verification Successful</strong></p>
+        </div>
+
         <p>
-          Welcome to <strong>Charmpay</strong>! We're excited to have you on
-          board. Charmpay is designed to provide a secure and seamless escrow
-          payment experience, ensuring trust in every transaction.
+          We're thrilled to welcome you to <strong>Charmpay</strong> — your
+          trusted platform for safe, simple, and secure escrow payments. Whether
+          you're buying, selling, or managing multiple transactions, we've got
+          you covered!
         </p>
 
-        <h3>What You Can Do with Charmpay</h3>
+        <h3>🌟 What You Can Do with Charmpay</h3>
         <p>
-          ✅ <strong>Send and receive payments</strong> securely through our
+          🔐 <strong>Send & receive payments</strong> safely through our smart
           escrow system.
         </p>
         <p>
-          ✅ <strong>Protect your transactions</strong> by ensuring funds are
-          only released when conditions are met.
+          🛡️ <strong>Protect every transaction</strong> by ensuring funds are
+          only released when terms are met.
         </p>
         <p>
-          ✅ <strong>Manage multiple transactions</strong> effortlessly from
-          your dashboard.
+          📊 <strong>Manage deals</strong> from a clean, intuitive dashboard.
         </p>
         <p>
-          ✅ <strong>Connect with trusted buyers & sellers</strong> in a safe
-          financial environment.
+          🤝 <strong>Connect securely</strong> with verified buyers and sellers.
         </p>
 
-        <h3>Getting Started is Easy</h3>
+        <h3>🚀 Getting Started</h3>
         <p>
-          <strong>1️⃣ Set up your profile</strong> – Secure your account and add
-          your payment details.
+          🧑‍💼 <strong>Set up your profile</strong> – Add your details and secure
+          your account.
         </p>
         <p>
-          <strong>2️⃣ Start a transaction</strong> – Create an escrow transaction
-          for a service or product.
+          💼 <strong>Start your first transaction</strong> – Create one for a
+          service or product.
         </p>
         <p>
-          <strong>3️⃣ Enjoy peace of mind</strong> – Funds are held securely
-          until both parties are satisfied.
+          🧘 <strong>Enjoy peace of mind</strong> – Charmpay protects you all
+          the way.
         </p>
         <p>
-          💡 <strong>Tip:</strong> Invite your friends and business partners to
-          use Charmpay for secure payments!
+          💡 <strong>Pro Tip:</strong> Invite your team or clients to Charmpay
+          and get paid securely.
         </p>
 
-        <h3>Our Commitment to You</h3>
+        <h3>🤝 We're Here for You</h3>
         <p>
-          At Charmpay, we prioritize
-          <strong>security, transparency, and reliability</strong> to create a
-          trustworthy payment platform for individuals and businesses. Our
-          support team is available whenever you need assistance.
+          At Charmpay, we stand for
+          <strong>security, transparency, and ease</strong>. Our team is here
+          24/7 to support your journey.
         </p>
         <p>
-          📩 <strong>Need Help?</strong> Contact us at
+          📩 <strong>Need help?</strong> Reach us at
           <a href="mailto:charmpayinc@gmail.com">charmpayinc@gmail.com</a>.
         </p>
+
         <p>
-          <strong>Best Regards,</strong><br />
+          <strong>Warm regards,</strong><br />
           The Charmpay Team
         </p>
       </div>

@@ -19,11 +19,6 @@ const Funding = database.define("funding", {
     allowNull: false,
     unique: true,
   },
-  paystack_id: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
   status: {
     type: DataTypes.ENUM(),
     allowNull: false,

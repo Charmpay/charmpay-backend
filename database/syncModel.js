@@ -3,9 +3,11 @@ import User from "../models/User.js";
 import Transaction from "../models/Transaction.js";
 import Task from "../models/Task.js";
 import Wallet from "../models/Wallet.js";
-import Otp from "../models/Otp.js";
 import Beneficiary from "../models/Beneficiary.js";
 import Notification from "../models/Notification.js";
+import Funding from "../models/Funding.js";
+import Dispute from "../models/Dispute.js";
+import Evidence from "../models/Evidence.js";
 
 const syncModel = async () => {
   User.hasMany(Transaction, { foreignKey: "senderId", as: "sentTransactions" });
@@ -110,6 +112,52 @@ const syncModel = async () => {
 
   Task.hasMany(Notification);
   Notification.belongsTo(Task);
+
+  User.hasMany(Funding);
+  Funding.belongsTo(User);
+
+  Wallet.hasMany(Funding);
+  Funding.belongsTo(Wallet);
+
+  Evidence.hasOne(Dispute, {
+    foreignKey: "raiserEvidenceId",
+  });
+  Dispute.belongsTo(Evidence, {
+    foreignKey: "raiserEvidenceId",
+    as: "raiserEvidence",
+  });
+
+  Evidence.hasOne(Dispute, {
+    foreignKey: "receiverEvidenceId",
+  });
+  Dispute.belongsTo(Evidence, {
+    foreignKey: "receiverEvidenceId",
+    as: "receiverEvidence",
+  });
+
+  Task.hasOne(Dispute);
+  Dispute.belongsTo(Task);
+
+  User.hasMany(Dispute, {
+    foreignKey: "raiserId",
+    as: "raisedDisputes",
+  });
+  Dispute.belongsTo(User, {
+    foreignKey: "raiserId",
+    as: "raiser",
+  });
+
+  User.hasMany(Dispute, {
+    foreignKey: "receiverId",
+    as: "receivedDisputes",
+  });
+  Dispute.belongsTo(User, {
+    foreignKey: "receiverId",
+    as: "receiver",
+  });
+
+  User.hasMany(Evidence);
+  Evidence.belongsTo(User);
 
   await database.sync({ alter: true });
   console.log("Model sync successful");
