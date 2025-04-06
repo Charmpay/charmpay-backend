@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>New Task Assigned - Charmpay</title>
     <style>
       body {
@@ -13,14 +13,14 @@
       }
       .email-container {
         max-width: 600px;
-        margin: 20px auto;
-        background-color: white;
+        margin: 30px auto;
+        background-color: #ffffff;
         border-radius: 8px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         overflow: hidden;
       }
       .header {
-        background-color: #1e3a8a;
+        background-color: #4c9aff;
         color: white;
         text-align: center;
         padding: 30px 20px;
@@ -30,33 +30,45 @@
         font-size: 24px;
       }
       .content {
-        padding: 20px;
+        padding: 25px;
       }
-      .content h2,
-      h3 {
+      .content h2 {
         color: #333;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
       }
       .content p {
         font-size: 16px;
         color: #555;
         line-height: 1.6;
+        margin-bottom: 15px;
+      }
+      ul {
+        background-color: #f1f9ff;
+        padding: 15px 20px;
+        border-left: 4px solid #4c9aff;
+        border-radius: 4px;
+        color: #333;
+        font-size: 15px;
+        margin-bottom: 20px;
+      }
+      ul li {
+        margin-bottom: 8px;
       }
       .button {
         display: inline-block;
         padding: 12px 20px;
-        background-color: #4c56af;
+        background-color: #4c9aff;
         color: white;
         text-decoration: none;
         font-weight: bold;
         border-radius: 5px;
-        margin-top: 20px;
+        margin-top: 10px;
       }
       .footer {
         background-color: #f9f9f9;
         color: #888;
         text-align: center;
-        padding: 10px;
+        padding: 15px;
         font-size: 12px;
       }
     </style>
@@ -79,10 +91,10 @@
           <li><strong>Assigned By:</strong> {{assigner.firstName}}</li>
           <li><strong>Status:</strong> {{task.status}}</li>
           <li><strong>Amount Paid:</strong> {{transaction.amount}}</li>
-          <li><strong>This task was created at</strong> {{timestamp}}</li>
+          <li><strong>Created At:</strong> {{timestamp}}</li>
         </ul>
 
-        <p>Check out your <strong>Charmpay App</strong> for more details.</p>
+        <p>Check your <strong>Charmpay App</strong> for more details.</p>
         <p>
           Please make sure to complete the task on time. If you have any
           questions, feel free to reach out to {{assignerName}} or contact

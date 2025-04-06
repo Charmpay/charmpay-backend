@@ -15,7 +15,7 @@ const Wallet = database.define("wallet", {
   },
   currency: {
     type: DataTypes.STRING,
-    defaultValue: "$",
+    defaultValue: "NGN",
     allowNull: false,
   },
 });

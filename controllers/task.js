@@ -551,3 +551,28 @@ export const disapproveTask = async (req, res) => {
     });
   }
 };
+
+export const remindUsers = async () => {
+  try {
+    const users = await User.findAll({ where: { emailVerified: true } });
+
+    users.forEach(async (user) => {
+      const userTasks = await Task.findAll({
+        where: { assigneeId: user.id, status: "in-progress" },
+      });
+
+      if (userTasks.length === 0) return;
+
+      compileEmail("task-reminder", {
+        user: {
+          firstName: user.firstName,
+        },
+        incompleteTasks: userTasks.length,
+      }).then((html) => {
+        sendMail("Pending Tasks Reminder - Charmpay", user.email, html);
+      });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

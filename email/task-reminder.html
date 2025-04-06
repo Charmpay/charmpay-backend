@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pending Tasks Reminder - Charmpay</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 0;
+      }
+
+      .email-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+        overflow: hidden;
+      }
+
+      .header {
+        background-color: #1e3a8a;
+        color: white;
+        text-align: center;
+        padding: 30px 20px;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 26px;
+      }
+
+      .content {
+        padding: 25px 30px;
+      }
+
+      .content h2 {
+        color: #1e3a8a;
+        margin-bottom: 10px;
+      }
+
+      .content p {
+        font-size: 16px;
+        color: #555;
+        line-height: 1.6;
+      }
+
+      .highlight {
+        font-size: 24px;
+        font-weight: bold;
+        color: #1e3a8a;
+        margin: 10px 0;
+      }
+
+      .button {
+        display: inline-block;
+        margin-top: 25px;
+        padding: 12px 24px;
+        background-color: #4c56af;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: bold;
+      }
+
+      .footer {
+        background-color: #f9fafc;
+        color: #888;
+        text-align: center;
+        padding: 20px;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <h1>⏳ You Have Pending Tasks</h1>
+      </div>
+      <div class="content">
+        <h2>Hello {{user.firstName}},</h2>
+        <p>
+          Just a quick reminder from <strong>Charmpay</strong> — you currently
+          have:
+        </p>
+
+        <div class="highlight">
+          {{incompleteTasks}} Incomplete Task(s)
+        </div>
+
+        <p>
+          Completing your tasks helps keep everything on track and ensures
+          smooth transactions for everyone involved.
+        </p>
+
+        <a href="{{tasksPageLink}}" class="button">View My Tasks</a>
+
+        <p style="margin-top: 25px">
+          If you need help or have any questions, feel free to reach out to us
+          at
+          <a href="mailto:charmpayinc@gmail.com">charmpayinc@gmail.com</a>.
+        </p>
+
+        <p>Thanks for being a valued member of the Charmpay community!</p>
+
+        <p><strong>– The Charmpay Team</strong></p>
+      </div>
+      <div class="footer">
+        © 2025 Charmpay Inc. | Secure Transactions, Trusted Payments.
+      </div>
+    </div>
+  </body>
+</html>

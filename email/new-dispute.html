@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dispute Notification - Charmpay</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .email-container {
+        max-width: 600px;
+        margin: 30px auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+      .header {
+        background-color: #7a3cec;
+        color: white;
+        text-align: center;
+        padding: 30px 20px;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+      }
+      .content {
+        padding: 25px;
+      }
+      .content h2 {
+        color: #333;
+        margin-bottom: 15px;
+      }
+      .content p {
+        font-size: 16px;
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 15px;
+      }
+      .highlight {
+        background-color: #f1f1ff;
+        padding: 12px;
+        border-left: 4px solid #7a3cec;
+        margin-bottom: 20px;
+        border-radius: 4px;
+      }
+      .button {
+        display: inline-block;
+        padding: 12px 20px;
+        background-color: #7a3cec;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 5px;
+        margin-top: 10px;
+      }
+      .footer {
+        background-color: #f9f9f9;
+        color: #888;
+        text-align: center;
+        padding: 15px;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <h1>🚨 Dispute Filed</h1>
+      </div>
+      <div class="content">
+        <h2>Hello {{user.firstName}},</h2>
+        <p>
+          A dispute has been filed for a transaction or task you are involved in
+          on <strong>Charmpay</strong>. Please review the details of the dispute
+          below:
+        </p>
+
+        <div class="highlight">
+          <p><strong>Task Title:</strong> {{task.title}}</p>
+          <p><strong>Dispute Id:</strong> {{disputeId}}</p>
+          <p><strong>Disputed By:</strong> {{disputedBy}}</p>
+          <p><strong>Filed On:</strong> {{disputeDate}}</p>
+          <p><strong>Reason:</strong> {{disputeReason}}</p>
+        </div>
+
+        <p>
+          We encourage all parties to resolve disputes amicably. However, if a
+          mutual resolution cannot be reached, Charmpay's Dispute Resolution
+          Team will intervene and review all available evidence to make a
+          decision.
+        </p>
+
+        <p>
+          You may respond to the dispute and provide supporting evidence by
+          clicking the button below:
+        </p>
+
+        <a href="{{disputeLink}}" class="button">View Dispute</a>
+
+        <p>
+          If you need assistance or have any questions, feel free to reach out
+          to our support team at
+          <a href="mailto:charmpayinc@gmail.com">charmpayinc@gmail.com</a>.
+        </p>
+
+        <p>Thank you for using Charmpay.</p>
+        <p><strong>— The Charmpay Team</strong></p>
+      </div>
+      <div class="footer">
+        © 2025 Charmpay Inc. | Secure Transactions Made Simple.
+      </div>
+    </div>
+  </body>
+</html>

@@ -19,6 +19,7 @@
     "handlebars": "^4.7.8",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
     "nodemailer": "^6.10.0",
     "paystack": "^2.0.1",
     "pg": "^8.13.3",
