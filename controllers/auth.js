@@ -132,13 +132,13 @@ export const logIn = async (req, res) => {
     if (!user)
       return res
         .status(401)
-        .json({ message: "Incorrect phone number or passcode" });
+        .json({ message: "Incorrect email or passcode" });
 
     let isPassCodeCorrect = compareSync(String(passCode), user.passCode);
     if (!isPassCodeCorrect)
       return res
         .status(401)
-        .json({ message: "Incorrect phone number or passcode" });
+        .json({ message: "Incorrect email or passcode" });
 
     const tokenData = {
       id: user.id,
