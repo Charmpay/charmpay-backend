@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import Task from "../models/Task.js";
 import Transaction from "../models/Transaction.js";
+import Notification from "../models/Notification.js";
 import User from "../models/User.js";
 import Wallet from "../models/Wallet.js";
 import { compareSync } from "bcrypt";
