@@ -5,7 +5,7 @@ import Notification from "../models/Notification.js";
 import User from "../models/User.js";
 import Wallet from "../models/Wallet.js";
 import Beneficiary from "../models/Beneficiary.js";
-import { Sequelize } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import compileEmail from "../util/emailCompiler.js";
 import sendMail from "../util/sendMail.js";
 
@@ -134,6 +134,48 @@ export const editTask = async (req, res) => {
   }
 };
 
+/**
+ * This endpoint is used search for task
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ */
+export const searchTask = async (req, res) => {
+  try {
+    const { id } = req.user;
+    let { q: searchQuery, status } = req.query;
+    searchQuery += "%";
+
+    const tasks = await Task.findAll({
+      where: Sequelize.and(
+        status && { status },
+        Sequelize.or({ assignerId: id }, { assigneeId: id }),
+        Sequelize.or(
+          {
+            title: {
+              [Op.iLike]: searchQuery,
+            },
+          },
+          {
+            description: {
+              [Op.iLike]: searchQuery,
+            },
+          }
+        )
+      ),
+      include: { all: true },
+    });
+
+    if (tasks.length === 0)
+      return res.status(404).json({ message: "No results" });
+
+    res.json(tasks);
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while retrieving tasks", error });
+  }
+};
 /**
  * This endpoint is used to get all tasks the current
  * logged in user assigned to people

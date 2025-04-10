@@ -13,12 +13,14 @@ import {
   getTaskIWasAssignedTo,
   getTaskIWasAssignedToByStatus,
   getTaskTransaction,
+  searchTask,
 } from "../controllers/task.js";
 
 const taskRouter = express.Router();
 
 taskRouter.post("/create", authMiddleware, createTask);
 taskRouter.get("/me", authMiddleware, getAllTasks);
+taskRouter.get("/search", authMiddleware, searchTask);
 taskRouter.get("/toothers", authMiddleware, getTaskIAssigned);
 taskRouter.get("/toothers/:status", authMiddleware, getTaskIAssignedByStatus);
 taskRouter.get("/tome", authMiddleware, getTaskIWasAssignedTo);

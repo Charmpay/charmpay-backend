@@ -11,6 +11,7 @@ import transactionRouter from "./routers/transaction.js";
 import fundingRouter from "./routers/funding.js";
 import beneficiaryRouter from "./routers/beneficiary.js";
 import notificationsRouter from "./routers/notification.js";
+import withdrawRouter from "./routers/withdraw.js";
 import { verifyFundingTransaction } from "./controllers/funding.js";
 import disputeRouter from "./routers/dispute.js";
 import { remindUsers } from "./controllers/task.js";
@@ -54,6 +55,7 @@ app.use("/api/funding", fundingRouter);
 app.use("/api/beneficiary", beneficiaryRouter);
 app.use("/api/notification", notificationsRouter);
 app.use("/api/dispute", disputeRouter);
+app.use("/api/withdraw", withdrawRouter);
 
 await syncModel();
 

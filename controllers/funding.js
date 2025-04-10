@@ -67,6 +67,7 @@ export const verifyFundingTransaction = async () => {
         funding.paystack_reference
       );
 
+      if (!paystackTransaction.data) return;
       if (paystackTransaction.data.status !== "success") return;
 
       let amount = paystackTransaction.data.amount / 100;
