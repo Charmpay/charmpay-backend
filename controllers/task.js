@@ -5,9 +5,11 @@ import Notification from "../models/Notification.js";
 import User from "../models/User.js";
 import Wallet from "../models/Wallet.js";
 import Beneficiary from "../models/Beneficiary.js";
-import { Sequelize } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import compileEmail from "../util/emailCompiler.js";
 import sendMail from "../util/sendMail.js";
+import expo from "../libs/expo.js";
+import pushNotifications from "../util/pushNotifications.js";
 
 /**
  * This endpoint is used to create a new task
@@ -81,6 +83,49 @@ export const createTask = async (req, res) => {
       type: "new-task",
     });
 
+    /**
+     * @type {import("expo-server-sdk").ExpoPushMessage[]}
+     */
+    let messages = [];
+
+    user.expoPushTokens.forEach((expoPushToken) => {
+      messages.push({
+        to: expoPushToken.token,
+        title: "Escrow Transaction successful",
+        body: `Transaction of ${transaction.amount} has been held in escrow successfully`,
+        data: {
+          transactionId: transaction.id,
+        },
+      });
+      messages.push({
+        to: expoPushToken.token,
+        title: "Task created",
+        body: "Task created successfully, your money as been held in escrow",
+        data: {
+          taskId: task.id,
+        },
+      });
+    });
+    assignee.expoPushTokens.forEach((expoPushToken) => {
+      messages.push({
+        to: expoPushToken.token,
+        title: "New Task Assigned to you",
+        body: "A task has been assigned to your check it out",
+        data: {
+          taskId: task.id,
+        },
+      });
+      messages.push({
+        to: expoPushToken.token,
+        title: "Escrow Transaction successful",
+        body: `Transaction of ${transaction.amount} made to you has been held in escrow successfully`,
+        data: {
+          transactionId: transaction.id,
+        },
+      });
+    });
+    pushNotifications(messages);
+
     compileEmail("new-task", {
       user: {
         firstName: assignee.firstName,
@@ -134,6 +179,48 @@ export const editTask = async (req, res) => {
   }
 };
 
+/**
+ * This endpoint is used search for task
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ */
+export const searchTask = async (req, res) => {
+  try {
+    const { id } = req.user;
+    let { q: searchQuery, status } = req.query;
+    searchQuery += "%";
+
+    const tasks = await Task.findAll({
+      where: Sequelize.and(
+        status && { status },
+        Sequelize.or({ assignerId: id }, { assigneeId: id }),
+        Sequelize.or(
+          {
+            title: {
+              [Op.iLike]: searchQuery,
+            },
+          },
+          {
+            description: {
+              [Op.iLike]: searchQuery,
+            },
+          }
+        )
+      ),
+      include: { all: true },
+    });
+
+    if (tasks.length === 0)
+      return res.status(404).json({ message: "No results" });
+
+    res.json(tasks);
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while retrieving tasks", error });
+  }
+};
 /**
  * This endpoint is used to get all tasks the current
  * logged in user assigned to people
