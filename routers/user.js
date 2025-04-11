@@ -10,6 +10,6 @@ const userRouter = express.Router();
 
 userRouter.get("/me", authMiddleware, getMyProfile);
 userRouter.patch("/me/edit", authMiddleware, editProfile);
-userRouter.get("/:email", fetchUserByEmail);
+userRouter.get("/:email", authMiddleware, fetchUserByEmail);
 
 export default userRouter;

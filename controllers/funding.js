@@ -4,9 +4,11 @@ import User from "../models/User.js";
 import Wallet from "../models/Wallet.js";
 import Funding from "../models/Funding.js";
 import Notification from "../models/Notification.js";
+import ExpoPushToken from "../models/ExpoPushToken.js";
 import compileEmail from "../util/emailCompiler.js";
 import sendMail from "../util/sendMail.js";
 import { Op } from "sequelize";
+import pushNotifications from "../util/pushNotifications.js";
 
 /**
  * This endpoint is used to initialize a new transaction
@@ -97,6 +99,27 @@ export const verifyFundingTransaction = async () => {
         transactionId: transaction.id,
         type: "account-deposit",
       });
+
+      /**
+       * @type {import("expo-server-sdk").ExpoPushMessage[]}
+       */
+      let messages = [];
+
+      let expoPushTokens = await ExpoPushToken.findAll({
+        where: { userId: funding.userId },
+      });
+
+      expoPushTokens.forEach((expoPushToken) => {
+        messages.push({
+          to: expoPushToken.token,
+          title: "Account funding successful",
+          body: `${wallet.currency}${amount} as been credited to your charmpay account`,
+          data: {
+            transactionId: transaction.id,
+          },
+        });
+      });
+      pushNotifications(messages);
       compileEmail("fund-account", {
         user: {
           firstName: funding.user.firstName,

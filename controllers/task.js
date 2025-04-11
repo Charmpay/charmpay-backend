@@ -8,6 +8,8 @@ import Beneficiary from "../models/Beneficiary.js";
 import { Op, Sequelize } from "sequelize";
 import compileEmail from "../util/emailCompiler.js";
 import sendMail from "../util/sendMail.js";
+import expo from "../libs/expo.js";
+import pushNotifications from "../util/pushNotifications.js";
 
 /**
  * This endpoint is used to create a new task
@@ -80,6 +82,49 @@ export const createTask = async (req, res) => {
       transactionId: transaction.id,
       type: "new-task",
     });
+
+    /**
+     * @type {import("expo-server-sdk").ExpoPushMessage[]}
+     */
+    let messages = [];
+
+    user.expoPushTokens.forEach((expoPushToken) => {
+      messages.push({
+        to: expoPushToken.token,
+        title: "Escrow Transaction successful",
+        body: `Transaction of ${transaction.amount} has been held in escrow successfully`,
+        data: {
+          transactionId: transaction.id,
+        },
+      });
+      messages.push({
+        to: expoPushToken.token,
+        title: "Task created",
+        body: "Task created successfully, your money as been held in escrow",
+        data: {
+          taskId: task.id,
+        },
+      });
+    });
+    assignee.expoPushTokens.forEach((expoPushToken) => {
+      messages.push({
+        to: expoPushToken.token,
+        title: "New Task Assigned to you",
+        body: "A task has been assigned to your check it out",
+        data: {
+          taskId: task.id,
+        },
+      });
+      messages.push({
+        to: expoPushToken.token,
+        title: "Escrow Transaction successful",
+        body: `Transaction of ${transaction.amount} made to you has been held in escrow successfully`,
+        data: {
+          transactionId: transaction.id,
+        },
+      });
+    });
+    pushNotifications(messages);
 
     compileEmail("new-task", {
       user: {

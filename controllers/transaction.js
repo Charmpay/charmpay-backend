@@ -243,7 +243,10 @@ export const directTransaction = async (req, res) => {
       transactionId: transaction.id,
       type: "send-new-transfer",
     });
-    res.json({ message: "Transaction successful" });
+    res.json({
+      message: "Transaction successful",
+      transactionId: transaction.id,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({

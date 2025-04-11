@@ -8,6 +8,7 @@ import Notification from "../models/Notification.js";
 import Funding from "../models/Funding.js";
 import Dispute from "../models/Dispute.js";
 import Evidence from "../models/Evidence.js";
+import ExpoPushToken from "../models/ExpoPushToken.js";
 
 const syncModel = async () => {
   User.hasMany(Transaction, { foreignKey: "senderId", as: "sentTransactions" });
@@ -158,6 +159,9 @@ const syncModel = async () => {
 
   User.hasMany(Evidence);
   Evidence.belongsTo(User);
+
+  User.hasMany(ExpoPushToken);
+  ExpoPushToken.belongsTo(User);
 
   await database.sync({ alter: true });
   console.log("Model sync successful");
