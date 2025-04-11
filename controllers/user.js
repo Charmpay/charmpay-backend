@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import paystack from "../libs/paystack.js";
 import ExpoPushToken from "../models/ExpoPushToken.js";
-import Expo from "expo-server-sdk";
+import { Expo } from "expo-server-sdk";
 
 /**
  * This endpoint is used to get the current logged in user profile
@@ -63,7 +63,7 @@ export const fetchUserByEmail = async (req, res) => {
 
     if (email === myEmail)
       return res
-        .status(400)
+        .status(422)
         .json({ message: "You can not select yourself as recipient" });
 
     const user = await User.findOne({
@@ -100,7 +100,7 @@ export const addExpoPushToken = async (req, res) => {
 
     if (!Expo.isExpoPushToken(token))
       return res
-        .status(400)
+        .status(422)
         .json({ message: "Please provide a valid expo push token" });
 
     let expoPushToken = await ExpoPushToken.create({ userId, token });

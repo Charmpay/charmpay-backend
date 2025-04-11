@@ -81,7 +81,7 @@ export const signUp = async (req, res) => {
       paystack_customer_code: customer.data.customer_code,
     });
     if (newUser.isNewRecord)
-      return res.status(400).json({ message: "Unable to create user account" });
+      return res.status(422).json({ message: "Unable to create user account" });
 
     await Wallet.create({
       userId: newUser.id,
