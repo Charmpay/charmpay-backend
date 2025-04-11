@@ -5,6 +5,8 @@ import Transaction from "../models/Transaction.js";
 import Notification from "../models/Notification.js";
 import ExpoPushToken from "../models/ExpoPushToken.js";
 import pushNotifications from "../util/pushNotifications.js";
+import { compareSync } from "bcrypt";
+import User from "../models/User.js";
 
 /**
  * Get all banks
@@ -93,13 +95,21 @@ export const createRecipient = async (req, res) => {
 export const withdraw = async (req, res) => {
   try {
     const { id: userId } = req.user;
-    const { amount, recipient } = req.body;
+    const { amount, recipient, transactionPin } = req.body;
 
     const userWallet = await Wallet.findOne({
       where: {
         userId,
       },
+      include: User,
     });
+
+    let isTransactionPinCorrect = compareSync(
+      String(transactionPin),
+      userWallet.user.transactionPin
+    );
+    if (!isTransactionPinCorrect)
+      return res.status(401).json({ message: "Incorrect transaction pin" });
 
     if (userWallet.currentBalance < amount)
       return res.status(400).json({ message: "Insufficient balance" });
@@ -121,8 +131,6 @@ export const withdraw = async (req, res) => {
         },
       }
     );
-
-    console.log(transfer.data);
 
     if (transfer.data.data.status != "success")
       return res.status(400).json({ message: "Withdraw failed" });
@@ -169,7 +177,7 @@ export const withdraw = async (req, res) => {
     });
     pushNotifications(messages);
 
-    res.json({ message: "Withdraw successful" });
+    res.json({ message: "Withdraw successful", transactionId: transaction.id });
   } catch (error) {
     res
       .status(500)
