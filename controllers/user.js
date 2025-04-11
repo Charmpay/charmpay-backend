@@ -63,7 +63,7 @@ export const fetchUserByEmail = async (req, res) => {
 
     if (email === myEmail)
       return res
-        .status(4)
+        .status(422)
         .json({ message: "You can not select yourself as recipient" });
 
     const user = await User.findOne({
