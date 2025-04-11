@@ -112,7 +112,7 @@ export const withdraw = async (req, res) => {
       return res.status(401).json({ message: "Incorrect transaction pin" });
 
     if (userWallet.currentBalance < amount)
-      return res.status(400).json({ message: "Insufficient balance" });
+      return res.status(422).json({ message: "Insufficient balance" });
 
     let transfer = await axios.post(
       "https://api.paystack.co/transfer",
@@ -133,7 +133,7 @@ export const withdraw = async (req, res) => {
     );
 
     if (transfer.data.data.status != "success")
-      return res.status(400).json({ message: "Withdraw failed" });
+      return res.status(422).json({ message: "Withdraw failed" });
 
     // recording the transaction
     const transaction = await Transaction.create({
