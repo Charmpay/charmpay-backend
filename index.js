@@ -20,6 +20,8 @@ config();
 
 const app = express();
 const { SERVER_PORT } = process.env;
+
+app.set('trust proxy', 1); // trust first proxy
 /**
  * Request limiter, set requests to 300 request per 30 minute for each IP
  */
